@@ -1,24 +1,22 @@
-/**
- *    @file main.cpp
- *    @brief main file
- *    @author rouxfederico@gmail.com
- */
-
-#include <common.h>
-
+// src/main.cpp
 #include <iostream>
+#include <vector>
 
-/**
- *   @fn main
- *   @brief main program
- */
+#include "sensors/SensorFactory.h"
 
 int main() {
-    Common c;
+    std::cout << "=== LAB FACTORY METHOD: HARDWARE ABSTRACTION ===" << std::endl;
 
-    std::cout << "Hello C++ Template!" << std::endl;
+    // Cambia esto a Mode::REAL_HARDWARE cuando subas el código al chip
+    Mode currentMode = Mode::SIMULATION;
 
-    c.talk();
+    // La fábrica nos entrega el sensor adecuado
+    std::unique_ptr<ISensor> mySensor = SensorFactory::createTemperatureSensor(currentMode);
+
+    if (mySensor) {
+        std::cout << "Sensor activo: " << mySensor->getSensorName() << std::endl;
+        std::cout << "Lectura: " << mySensor->readValue() << " C" << std::endl;
+    }
 
     return 0;
 }
