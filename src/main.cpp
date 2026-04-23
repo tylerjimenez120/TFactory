@@ -8,7 +8,7 @@ int main() {
     std::cout << "=== LAB FACTORY METHOD: HARDWARE ABSTRACTION ===" << std::endl;
 
     // Cambia esto a Mode::REAL_HARDWARE cuando subas el código al chip
-    Mode currentMode = Mode::SIMULATION;
+    Mode currentMode = Mode::REAL_HARDWARE;
 
     // La fábrica nos entrega el sensor adecuado
     std::unique_ptr<ISensor> mySensor = SensorFactory::createTemperatureSensor(currentMode);

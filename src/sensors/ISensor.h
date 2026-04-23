@@ -1,15 +1,24 @@
-// src/sensors/ISensor.h
-#ifndef ISENSOR_H
-#define ISENSOR_H
-
+#pragma once  // Sugerencia del profe
 #include <string>
 
-// Interfaz base: define EL QUÉ, no el CÓMO.
 class ISensor {
    public:
-    virtual ~ISensor() {}           // Destructor virtual esencial para polimorfismo
-    virtual float readValue() = 0;  // Método virtual puro
+    ISensor() = default;
+    virtual ~ISensor() = default;
+
+    // Regla de los 5: Evitamos copias accidentales en interfaces de hardware
+    // ❌ Constructor de copia: evita crear un sensor copiando otro (no duplicar hardware)
+    ISensor(const ISensor&) = delete;
+
+    // ❌ Asignación por copia: evita copiar datos de un sensor a otro existente
+    ISensor& operator=(const ISensor&) = delete;
+
+    // ✔ Constructor de movimiento: permite transferir el recurso (sensor) a un nuevo objeto
+    ISensor(ISensor&&) = default;
+
+    // ✔ Asignación por movimiento: permite transferir el recurso a un objeto ya existente
+    ISensor& operator=(ISensor&&) = default;
+
+    virtual float readValue() = 0;
     virtual std::string getSensorName() const = 0;
 };
-
-#endif
