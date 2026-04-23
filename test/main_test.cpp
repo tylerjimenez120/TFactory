@@ -1,35 +1,33 @@
-/**
- * @file main_test.cpp
- * @brief Test file for CXX Template project
- * @author rouxfederico@gmail.com
- */
-
-#include <common.h>
-#include <gtest/gtest.h>  // NOLINT
+#include <gtest/gtest.h>
+#include <sensors/SensorFactory.h>
 
 /**
- * @brief Test case for Common::add function
+ * @brief Verifica que la fábrica cree el sensor de simulación correctamente
  */
-TEST(CommonTest, AddTest) {
-    Common c;
-    EXPECT_EQ(c.add(2, 3), 5);
-    EXPECT_EQ(c.add(0, 0), 0);
-    EXPECT_EQ(c.add(-1, 1), 0);
-    EXPECT_EQ(c.add(10, -5), 5);
+TEST(SensorFactoryTest, CreateMockSensor) {
+    auto sensor = SensorFactory::createTemperatureSensor(Mode::SIMULATION);
+
+    ASSERT_NE(sensor, nullptr);  // No debe ser nulo
+    EXPECT_EQ(sensor->getSensorName(), "PC_Mock_Simulator");
 }
 
 /**
- * @brief Test case for Common::talk function
+ * @brief Verifica que la fábrica cree el sensor de hardware correctamente
  */
-TEST(CommonTest, TalkTest) {
-    Common c;
-    EXPECT_EQ(c.talk(), 0);
+TEST(SensorFactoryTest, CreateHardwareSensor) {
+    auto sensor = SensorFactory::createTemperatureSensor(Mode::REAL_HARDWARE);
+
+    ASSERT_NE(sensor, nullptr);
+    EXPECT_EQ(sensor->getSensorName(), "STM32_Internal_Temp");
 }
 
 /**
- * @brief Test case for Common object creation
+ * @brief Verifica el polimorfismo: diferentes clases, misma interfaz
  */
-TEST(CommonTest, ConstructorTest) {
-    Common c;
-    SUCCEED();
+TEST(SensorFactoryTest, PolymorphismCheck) {
+    auto s1 = SensorFactory::createTemperatureSensor(Mode::SIMULATION);
+    auto s2 = SensorFactory::createTemperatureSensor(Mode::REAL_HARDWARE);
+
+    // Ambos son ISensor*, pero sus valores y comportamientos son distintos
+    EXPECT_NE(s1->getSensorName(), s2->getSensorName());
 }

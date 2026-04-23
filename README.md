@@ -1,70 +1,47 @@
-# C++ Repository Template
+# Lab: Hardware Abstraction using Factory Method Pattern
 
-**Author:**
+This repository demonstrates a professional implementation of the **Factory Method Design Pattern** in C++. The project focuses on decoupling high-level application logic from low-level hardware drivers, a critical practice in embedded systems engineering.
 
-# Repo information:
+## 🎯 Project Overview
 
-## Installation
+In embedded development (STM32/ESP32), software often needs to run on different hardware revisions or even be simulated on a PC for testing. This lab implements a **Sensor Abstraction Layer** that allows the system to switch between real hardware drivers and simulation mocks seamlessly.
 
-This repo can be built and deployed inside a container based on Debian Jessie Slim
+### Key Features:
+- **Factory Method Pattern:** Centralizes object creation logic.
+- **Polymorphism:** Uses a common interface (`ISensor`) for diverse sensor implementations.
+- **Memory Safety:** Implements `std::unique_ptr` for automatic resource management (RAII).
+- **Unit Testing:** Integrated with GoogleTest to verify factory logic and polymorphic behavior.
 
-### a) Build and deploy from docker command line:
 
-- Open a terminal(Unix or macOS) or PowerShell in Windows and cd into the project folder
 
-- Build the docker image:
+## 🛠️ System Architecture
 
+The project is divided into three main components:
+
+1.  **The Interface (`ISensor`):** A pure virtual class that defines the contract for all sensors.
+2.  **Concrete Products:**
+    - `HardwareTempSensor`: Simulates interaction with MCU registers (e.g., ADC/I2C).
+    - `MockTempSensor`: Provides randomized data for PC-based simulation and testing.
+3.  **The Creator (`SensorFactory`):** A static factory that instantiates the appropriate sensor based on the system's operational mode (`REAL_HARDWARE` vs `SIMULATION`).
+
+
+
+## 🚀 Building and Running
+
+### Prerequisites
+- CMake 3.16+
+- C++11 compatible compiler
+- GoogleTest (automatically fetched via CMake)
+
+### Compilation
+From the project root:
 ```bash
-docker-compose up -d
-```
-
-- Run the container and share the project folder with it:
-
-```bash
-docker exec -it cxx-template bash
-```
-
-### b) Code quality tools
-
-CMake has built-in features to connect with code quality tools and analyze the code that is being compiled.
-In the current version of this repo, the following tools has been configured:
-
-* clang-tidy
-* clang-format
-* iwyu
-
-Those tools are triggered from CMake in the following lines on the general CMakeLists.txt
-
-~~~CMake
-set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
-set(CMAKE_CXX_CLANG_FORMAT "clang-format")
-set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "iwyu")
-~~~
-
-If you run into clang-tidy issues, there's a `make fix` target that can do the work for you
-
-## Test suite
-
-Unit test are based on gtest and gmock. To run tests, jump into the container and run:
-
-~~~bash
-cd build
-cmake ..
-make test
-~~~
-
-## Building the sources:
-
-This project is based on CMake. To compile everything 
-
-~~~bash
-mkdir -p build
-cd build
+mkdir -p build && cd build
 cmake ..
 make
-~~~
 
-The executable files can be found at:
 
-- app: build/src/cxx_app
-- test suite: build/test/test_suite
+
+./src/cxx_app
+
+./test/test_runner
